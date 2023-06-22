@@ -8,15 +8,22 @@ namespace Microservices.Gateway.Server.WebAPI;
 
 internal static class ReservationAPI
 {
-  internal static void MapReservationEndpoints(WebApplication app)
+  internal static void MapReservationEndpoints(this WebApplication app)
   {
     app.MapPost("/CreateReservation", CreateReservation);
   }
 
-  private static async Task<IResult> CreateReservation([FromServices] IMediator mediator, Guid userId, DateTime fromDate, DateTime toDate)
+  private static async Task<IResult> CreateReservation([FromServices] IMediator mediator, Guid userId, Guid flyId, int SeatNumber, Guid CarId, Guid HotelId)
   {
-    await mediator.Send(new CreateReservationCommand { UserId = userId, FromDate = fromDate, ToDate = toDate });
+    await mediator.Send(new CreateReservationCommand
+    {
+      UserId = userId,
+      FlyId = flyId,
+      SeatNumber = SeatNumber,
+      CarId = CarId,
+      HotelId = HotelId
+    });
 
-    return Results.Accepted();
+    return TypedResults.Created();
   }
 }

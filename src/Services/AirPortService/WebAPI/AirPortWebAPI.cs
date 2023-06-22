@@ -16,8 +16,8 @@ internal static class AirPortWebAPI
   {
     app.MapPost("/GetReservation/{reservationId}", GetReservation);
     app.MapPost("/CreateFlyReservation", CreateFlyReservation);
-    app.MapPost("/CancelFlyReservation", CancelFlyReservation);
-    app.MapPost("/ConfirmFlyReservation", ConfirmFlyReservation);
+    app.MapPost("/CancelFlyReservation/{reservationId}", CancelFlyReservation);
+    app.MapPost("/ConfirmFlyReservation/{reservationId}", ConfirmFlyReservation);
   }
 
   private static async Task<IResult> GetReservation([FromServices]IAirPortRepository airPortRepository, Guid reservationId)
@@ -26,22 +26,17 @@ internal static class AirPortWebAPI
     return reservation is null ? Results.NotFound() : Results.Ok(reservation);
   }
 
-  private static async Task<IResult> CreateFlyReservation([FromServices]IMediator mediator, Guid userId, Guid flyId, int seatNumber)
+  private static async Task<IResult> CreateFlyReservation([FromServices]IMediator mediator, CreateFlyReservationCommand command)
   {
-    var result = await mediator.Send(new CreateFlyReservationCommand
-    {
-      UserId = userId,
-      FlyId = flyId,
-      SeatNumber = seatNumber
-    });
-    return result is not null ? Results.Created($"/GetReservation/{result.Value}", result.Value) : Results.BadRequest();
+    var result = await mediator.Send(command);
+    return result is not null ? TypedResults.Created($"/GetReservation/{result.Value}", result.Value) : Results.BadRequest();
   }
 
-  private static async Task<IResult> CancelFlyReservation([FromServices]IMediator mediator, Guid ReservationId)
+  private static async Task<IResult> CancelFlyReservation([FromServices]IMediator mediator, Guid reservationId)
   {
     await mediator.Send(new CancelFlyReservationCommand
     {
-      ReservationId = ReservationId
+      ReservationId = reservationId
     });
     return Results.Ok();
   }

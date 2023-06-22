@@ -35,6 +35,6 @@ if(app.Environment.IsDevelopment())
 
 app.MapAirPortEndpoints();
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.Run();
