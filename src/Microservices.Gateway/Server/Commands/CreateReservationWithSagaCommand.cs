@@ -1,8 +1,9 @@
 ﻿using MediatR;
+using Microservices.Gateway.Server.Models;
 
 namespace Microservices.Gateway.Server.Commands;
 
-public record CreateReservationCommand : IRequest<Guid?>
+public record CreateReservationWithSagaCommand : IRequest<ReservetionData?>
 {
   public required Guid UserId { get; init; }
   public required Guid FlyId { get; init; }

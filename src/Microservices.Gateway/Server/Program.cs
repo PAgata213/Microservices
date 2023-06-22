@@ -1,4 +1,7 @@
+using Chronicle;
+
 using Microservices.Gateway.Server.Helpers;
+using Microservices.Gateway.Server.Services;
 using Microservices.Gateway.Server.WebAPI;
 
 using Microsoft.AspNetCore.ResponseCompression;
@@ -14,6 +17,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient();
 builder.Services.AddMediatR(o => o.RegisterServicesFromAssembly(typeof(Program).Assembly));
 builder.Services.AddSingleton<IHttpClientHelper, HttpClientHelper>();
+builder.Services.AddSingleton<IReservationService, ReservationService>();
+builder.Services.AddChronicle();
 
 var app = builder.Build();
 
