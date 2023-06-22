@@ -6,4 +6,5 @@ public interface IHttpClientHelper
 {
   Task<HttpResponseData<T>> GetAsync<T>(string url);
   Task<HttpResponseData<TResponse>> PostAsync<TData, TResponse>(string url, TData? data);
+  Task<bool> PostAsync<TData, TResponse>(string url);
 }

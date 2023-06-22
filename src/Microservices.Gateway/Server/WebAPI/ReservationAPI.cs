@@ -15,15 +15,21 @@ internal static class ReservationAPI
 
   private static async Task<IResult> CreateReservation([FromServices] IMediator mediator, Guid userId, Guid flyId, int SeatNumber, Guid CarId, Guid HotelId)
   {
-    await mediator.Send(new CreateReservationCommand
+    try
     {
-      UserId = userId,
-      FlyId = flyId,
-      SeatNumber = SeatNumber,
-      CarId = CarId,
-      HotelId = HotelId
-    });
-
-    return TypedResults.Created();
+      var result = await mediator.Send(new CreateReservationCommand
+      {
+        UserId = userId,
+        FlyId = flyId,
+        SeatNumber = SeatNumber,
+        CarId = CarId,
+        HotelId = HotelId
+      });
+      return result is null ? TypedResults.BadRequest("Sorry, but some error ocured") : TypedResults.Created(result.ToString());
+    }
+    catch(Exception ex)
+    {
+      return TypedResults.BadRequest(ex.Message);
+    }
   }
 }

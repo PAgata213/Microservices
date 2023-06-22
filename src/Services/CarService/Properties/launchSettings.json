@@ -33,12 +33,11 @@
       "launchBrowser": false,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
       "environmentVariables": {
-        "ASPNETCORE_HTTPS_PORTS": "5201",
-        "ASPNETCORE_HTTP_PORTS": "5200"
+        "ASPNETCORE_HTTP_PORTS": "5300"
       },
       "publishAllPorts": true,
       "useSSL": true,
-      "DockerfileRunArguments": "--network=ms-network"
+      "DockerfileRunArguments": "--network=ms-network --name CarService-node"
     }
   },
   "$schema": "http://json.schemastore.org/launchsettings.json",

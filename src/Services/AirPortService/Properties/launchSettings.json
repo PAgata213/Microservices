@@ -33,11 +33,10 @@
       "launchBrowser": false,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
       "environmentVariables": {
-        "ASPNETCORE_HTTPS_PORTS": "5101",
         "ASPNETCORE_HTTP_PORTS": "5100"
       },
       "publishAllPorts": true,
-      "useSSL": true,
+      "useSSL": false,
       "DockerfileRunArguments": "--network=ms-network --name AirPortService-node"
     }
   },

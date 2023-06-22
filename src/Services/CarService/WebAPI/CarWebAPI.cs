@@ -16,8 +16,8 @@ internal static class CarWebAPI
   {
     app.MapPost("/GetReservation/{reservationId}", GetReservation);
     app.MapPost("/CreateCarReservation", CreateCarReservation);
-    app.MapPost("/CancelCarReservation", CancelCarReservation);
-    app.MapPost("/ConfirmCarReservation", ConfirmCarReservation);
+    app.MapPost("/CancelCarReservation/{ReservationId}", CancelCarReservation);
+    app.MapPost("/ConfirmCarReservation/{ReservationId}", ConfirmCarReservation);
   }
 
   private static async Task<IResult> GetReservation([FromServices]ICarRepository carRepository, Guid reservationId)
@@ -26,13 +26,9 @@ internal static class CarWebAPI
     return reservation is null ? Results.NotFound() : Results.Ok(reservation);
   }
 
-  private static async Task<IResult> CreateCarReservation([FromServices]IMediator mediator, Guid userId, Guid carId)
+  private static async Task<IResult> CreateCarReservation([FromServices]IMediator mediator, CreateCarReservationCommand command)
   {
-    var result = await mediator.Send(new CreateCarReservationCommand
-    {
-      UserId = userId,
-      CarId = carId
-    });
+    var result = await mediator.Send(command);
     return result is not null ? Results.Created($"/GetReservation/{result.Value}", result.Value) : Results.BadRequest();
   }
 

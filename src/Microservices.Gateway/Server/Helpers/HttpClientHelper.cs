@@ -20,6 +20,12 @@ public class HttpClientHelper(HttpClient httpClient) : IHttpClientHelper
     return await ProcessResponse<TResponse>(response);
   }
 
+  public async Task<bool> PostAsync<TData, TResponse>(string url)
+  {
+    var response = await httpClient.PostAsync(url, null);
+    return response.IsSuccessStatusCode;
+  }
+
   private async Task<HttpResponseData<T>> ProcessResponse<T>(HttpResponseMessage httpResponseMessage)
   {
     var content = await httpResponseMessage.Content.ReadAsStringAsync();

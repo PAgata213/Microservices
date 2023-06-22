@@ -3,8 +3,7 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0-preview AS base
 USER app
 WORKDIR /app
-EXPOSE 5300
-EXPOSE 5301
+EXPOSE 5200
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0-preview AS build
 WORKDIR /src

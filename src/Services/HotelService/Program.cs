@@ -35,6 +35,6 @@ if(app.Environment.IsDevelopment())
 
 app.MapHotelEndpoints();
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.Run();

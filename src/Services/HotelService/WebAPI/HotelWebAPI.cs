@@ -16,8 +16,8 @@ internal static class HotelWebAPI
   {
     app.MapPost("/GetReservation/{reservationId}", GetReservation);
     app.MapPost("/CreateHotelReservation", CreateHotelReservation);
-    app.MapPost("/CancelHotelReservation", CancelHotelReservation);
-    app.MapPost("/ConfirmHotelReservation", ConfirmHotelReservation);
+    app.MapPost("/CancelHotelReservation/{ReservationId}", CancelHotelReservation);
+    app.MapPost("/ConfirmHotelReservation/{ReservationId}", ConfirmHotelReservation);
   }
 
   private static async Task<IResult> GetReservation([FromServices]IHotelRepository HotelRepository, Guid reservationId)
@@ -26,13 +26,9 @@ internal static class HotelWebAPI
     return reservation is null ? Results.NotFound() : Results.Ok(reservation);
   }
 
-  private static async Task<IResult> CreateHotelReservation([FromServices]IMediator mediator, Guid userId, Guid hotelId)
+  private static async Task<IResult> CreateHotelReservation([FromServices]IMediator mediator, CreateHotelReservationCommand command)
   {
-    var result = await mediator.Send(new CreateHotelReservationCommand
-    {
-      UserId = userId,
-      HotelId = hotelId
-    });
+    var result = await mediator.Send(command);
     return result is not null ? Results.Created($"/GetReservation/{result.Value}", result.Value) : Results.BadRequest();
   }
 

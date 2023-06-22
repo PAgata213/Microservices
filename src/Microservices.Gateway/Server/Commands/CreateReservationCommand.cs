@@ -2,7 +2,7 @@
 
 namespace Microservices.Gateway.Server.Commands;
 
-public record CreateReservationCommand : IRequest
+public record CreateReservationCommand : IRequest<Guid?>
 {
   public required Guid UserId { get; init; }
   public required Guid FlyId { get; init; }
