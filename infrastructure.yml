@@ -22,6 +22,44 @@ services:
       - "127.0.0.1:15672:15672"
       - "127.0.0.1:5672:5672"
 
+
+  Gateway:
+    image: microservicesgatewayserver:dev
+    container_name: gateway-node
+    restart: unless-stopped
+    networks: 
+      - ms-network
+    ports:
+      - "127.0.0.1:5000:5000"
+      - "127.0.0.1:5001:5001"
+
+  AirPort:
+    image: airportservice:dev
+    container_name: AirPortService-node
+    restart: unless-stopped
+    networks: 
+      - ms-network
+    ports:
+      - "127.0.0.1:5100:5100"
+
+  Hotel:
+    image: hotelservice:dev
+    container_name: HotelService-node
+    restart: unless-stopped
+    networks: 
+      - ms-network
+    ports:
+      - "127.0.0.1:5200:5200"
+
+  Car:
+    image: carservice:dev
+    container_name: CarService-node
+    restart: unless-stopped
+    networks: 
+      - ms-network
+    ports:
+      - "127.0.0.1:5300:5300"
+
 networks:
   ms-network:
     name: ms-network
