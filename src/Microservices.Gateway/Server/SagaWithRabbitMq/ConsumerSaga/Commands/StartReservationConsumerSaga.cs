@@ -1,9 +1,11 @@
-﻿using MediatR;
+﻿using MassTransit;
 
-namespace Microservices.Gateway.Server.Commands;
+namespace Microservices.Gateway.Server.SagaWithRabbitMq.ConsumerSaga.Commands;
 
-public record CreateReservationCommand : IRequest<Guid?>
+public class StartReservationConsumerSaga : CorrelatedBy<Guid>
 {
+  public Guid CorrelationId { get; set; }
+
   public required Guid UserId { get; init; }
   public required Guid FlyId { get; init; }
   public required int SeatNumber { get; init; }

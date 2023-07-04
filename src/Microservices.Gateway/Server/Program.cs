@@ -1,10 +1,11 @@
 using Chronicle;
 
+using MassTransit;
+
 using Microservices.Gateway.Server.Helpers;
+using Microservices.Gateway.Server.SagaWithRabbitMq.ConsumerSaga;
 using Microservices.Gateway.Server.Services;
 using Microservices.Gateway.Server.WebAPI;
-
-using Microsoft.AspNetCore.ResponseCompression;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,25 @@ builder.Services.AddMediatR(o => o.RegisterServicesFromAssembly(typeof(Program).
 builder.Services.AddSingleton<IHttpClientHelper, HttpClientHelper>();
 builder.Services.AddSingleton<IReservationService, ReservationService>();
 builder.Services.AddChronicle();
+
+builder.Services.AddMassTransit(cfg => 
+{
+  cfg.AddBus(busCtx => Bus.Factory.CreateUsingRabbitMq(rmcfg =>
+  {
+    rmcfg.Host("rabbitmq-node", "/", h =>
+    {
+      h.Username("guest");
+      h.Password("guest");
+    });
+    rmcfg.ReceiveEndpoint("Microservices.Gateway.ConsumerSaga", e =>
+    {
+      e.ConfigureSaga<CreateReservationWithConsumerSaga>(busCtx);
+    });
+  }));
+
+  cfg.AddSaga<CreateReservationWithConsumerSaga>()
+    .InMemoryRepository();
+});
 
 var app = builder.Build();
 

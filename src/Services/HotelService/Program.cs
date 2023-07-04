@@ -2,6 +2,8 @@ using HotelService.DBContext;
 using HotelService.Repository;
 using HotelService.WebAPI;
 
+using MassTransit;
+
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +19,28 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddMediatR(o => o.RegisterServicesFromAssembly(typeof(Program).Assembly));
 builder.Services.AddScoped<IHotelRepository, HotelRepository>();
+
+builder.Services.AddMassTransit(cfg =>
+{
+  cfg.AddBus(busCtx => Bus.Factory.CreateUsingRabbitMq(rmcfg =>
+  {
+    rmcfg.Host("rabbitmq-node", "/", h =>
+    {
+      h.Username("guest");
+      h.Password("guest");
+    });
+    rmcfg.ReceiveEndpoint("Microservices.Gateway.Server.SagaWithRabbitMq.ConsumerSaga.Commands:CreateHotelReservation", e =>
+    {
+      e.ConfigureConsumer<CreateHotelReservationConsumer>(busCtx);
+    });
+    rmcfg.ReceiveEndpoint("Microservices.Gateway.Server.SagaWithRabbitMq.ConsumerSaga.Commands:CancelHotelReservation", e =>
+    {
+      e.ConfigureConsumer<CancelHotelReservationConsumer>(busCtx);
+    });
+  }));
+  cfg.AddConsumer<CreateHotelReservationConsumer>();
+  cfg.AddConsumer<CancelHotelReservationConsumer>();
+});
 
 var app = builder.Build();
 

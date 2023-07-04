@@ -1,4 +1,5 @@
 ﻿using CarService.Commands;
+using CarService.Exceptions;
 using CarService.Models;
 using CarService.Repository;
 
@@ -12,7 +13,7 @@ public class CreateCarReservationCommandHandler(ICarRepository airPortRepository
   {
     if(await airPortRepository.ExistsAsync(x => x.CarId == request.CarId))
     {
-      return null;
+      throw new CarAlreadyReserved(request.CarId);
     }
 
     var reservation = new Reservation

@@ -1,6 +1,6 @@
-﻿namespace Microservices.Gateway.Server.SagaCommands;
+﻿namespace Microservices.Gateway.Server.SagaWithRabbitMq.ConsumerSaga;
 
-public record CompleteReservationSaga
+internal record CreateReservationSagaData
 {
   public Guid FlyReservationId { get; set; }
   public Guid HotelReservationId { get; set; }

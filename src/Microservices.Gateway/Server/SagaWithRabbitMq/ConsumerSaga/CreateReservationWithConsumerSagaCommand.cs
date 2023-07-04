@@ -1,9 +1,8 @@
 ﻿using MediatR;
-using Microservices.Gateway.Server.Models;
 
-namespace Microservices.Gateway.Server.Commands;
+namespace Microservices.Gateway.Server.SagaWithRabbitMq.ConsumerSaga;
 
-public record CreateReservationWithSagaCommand : IRequest<ReservetionData?>
+public record CreateReservationWithConsumerSagaCommand : IRequest
 {
   public required Guid UserId { get; init; }
   public required Guid FlyId { get; init; }

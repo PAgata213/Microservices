@@ -19,10 +19,12 @@
 
   <ItemGroup>
     <PackageReference Include="Chronicle_" Version="3.2.1" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.1.0-develop.1407" />
     <PackageReference Include="MediatR" Version="12.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.0-preview.5.23302.2" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="RabbitMQ.Client" Version="6.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0" />
@@ -31,6 +33,10 @@
   <ItemGroup>
     <ProjectReference Include="..\Client\Microservices.Gateway.Client.csproj" />
     <ProjectReference Include="..\Shared\Microservices.Gateway.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="SagaWithRabbitMq\StateMachine\" />
   </ItemGroup>
 
 

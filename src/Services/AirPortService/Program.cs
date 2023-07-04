@@ -2,6 +2,8 @@ using AirPortService.DBContext;
 using AirPortService.Repository;
 using AirPortService.WebAPI;
 
+using MassTransit;
+
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +19,28 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddMediatR(o => o.RegisterServicesFromAssembly(typeof(Program).Assembly));
 builder.Services.AddScoped<IAirPortRepository, AirPortRepository>();
+
+builder.Services.AddMassTransit(cfg =>
+{
+  cfg.AddBus(busCtx => Bus.Factory.CreateUsingRabbitMq(rmcfg =>
+  {
+    rmcfg.Host("rabbitmq-node", "/", h =>
+    {
+      h.Username("guest");
+      h.Password("guest");
+    });
+    rmcfg.ReceiveEndpoint("Microservices.Gateway.Server.SagaWithRabbitMq.ConsumerSaga.Commands:CreateFlyReservation", e =>
+    {
+      e.ConfigureConsumer<CreateFlyReservationConsumer>(busCtx);
+    });
+    rmcfg.ReceiveEndpoint("Microservices.Gateway.Server.SagaWithRabbitMq.ConsumerSaga.Commands:CancelFlyReservation", e =>
+    {
+      e.ConfigureConsumer<CancelFlyReservationConsumer>(busCtx);
+    });
+  }));
+  cfg.AddConsumer<CreateFlyReservationConsumer>();
+  cfg.AddConsumer<CancelFlyReservationConsumer>();
+});
 
 var app = builder.Build();
 

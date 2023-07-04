@@ -1,7 +1,6 @@
 ﻿using Chronicle;
 
-using Microservices.Gateway.Server.Handlers;
-using Microservices.Gateway.Server.SagaCommands;
+using Microservices.Gateway.Server.Sagas.SagaCommands;
 using Microservices.Gateway.Server.Services;
 
 namespace Microservices.Gateway.Server.Sagas;
@@ -63,12 +62,12 @@ internal class CreateReservationSaga(IReservationService reservationService) : S
     }
   }
 
-  public Task HandleAsync(CompleteReservationSaga message, ISagaContext context)
+  public async Task HandleAsync(CompleteReservationSaga message, ISagaContext context)
   {
     message.FlyReservationId = Data.FlyReservationId;
     message.HotelReservationId = Data.HotelReservationId;
     message.CarReservationId = Data.CarReservationId;
-    return Task.CompletedTask;
+    await CompleteAsync();
   }
   public Task CompensateAsync(CompleteReservationSaga message, ISagaContext context) => Task.CompletedTask;
 }

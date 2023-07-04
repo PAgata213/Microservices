@@ -1,4 +1,5 @@
 ﻿using AirPortService.Commands;
+using AirPortService.Exceptions;
 using AirPortService.Models;
 using AirPortService.Repository;
 
@@ -12,7 +13,7 @@ public class CreateFlyReservationCommandHandler(IAirPortRepository airPortReposi
   {
     if(await airPortRepository.ExistsAsync(x => x.FlyId == request.FlyId && x.SeatNumber == request.SeatNumber))
     {
-      return null;
+      throw new ReservationForGivenFlyAndSeatAlreadyExists(request.FlyId, request.SeatNumber);
     }
 
     var reservation = new Reservation

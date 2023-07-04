@@ -2,6 +2,8 @@ using CarService.DBContext;
 using CarService.Repository;
 using CarService.WebAPI;
 
+using MassTransit;
+
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +19,28 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddMediatR(o => o.RegisterServicesFromAssembly(typeof(Program).Assembly));
 builder.Services.AddScoped<ICarRepository, CarRepository>();
+
+builder.Services.AddMassTransit(cfg =>
+{
+  cfg.AddBus(busCtx => Bus.Factory.CreateUsingRabbitMq(rmcfg =>
+  {
+    rmcfg.Host("rabbitmq-node", "/", h =>
+    {
+      h.Username("guest");
+      h.Password("guest");
+    });
+    rmcfg.ReceiveEndpoint("Microservices.Gateway.Server.SagaWithRabbitMq.ConsumerSaga.Commands:CreateCarReservation", e =>
+    {
+      e.ConfigureConsumer<CreateCarReservationConsumer>(busCtx);
+    });
+    rmcfg.ReceiveEndpoint("Microservices.Gateway.Server.SagaWithRabbitMq.ConsumerSaga.Commands:CancelCarReservation", e =>
+    {
+      e.ConfigureConsumer<CancelCarReservationConsumer>(busCtx);
+    });
+  }));
+  cfg.AddConsumer<CreateCarReservationConsumer>();
+  cfg.AddConsumer<CancelCarReservationConsumer>();
+});
 
 var app = builder.Build();
 

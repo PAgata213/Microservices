@@ -1,4 +1,4 @@
-﻿namespace Microservices.Gateway.Server.SagaCommands;
+﻿namespace Microservices.Gateway.Server.Sagas.SagaCommands;
 
 internal record CreateCarReservation
 {
