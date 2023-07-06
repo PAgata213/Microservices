@@ -22,39 +22,58 @@ services:
       - "127.0.0.1:15672:15672"
       - "127.0.0.1:5672:5672"
 
-
-  Gateway:
-    image: microservicesgatewayserver:dev
+  microservices.gateway.server:
+    image: gateway:dev
+    build:
+      context: .
+      dockerfile: src/Microservices.Gateway/Server/Dockerfile
     container_name: gateway-node
     restart: unless-stopped
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
     networks: 
       - ms-network
     ports:
       - "127.0.0.1:5000:5000"
       - "127.0.0.1:5001:5001"
 
-  AirPort:
+  AirPortService:
     image: airportservice:dev
+    build:
+      context: .
+      dockerfile: src/Services/AirPortService/Dockerfile
     container_name: AirPortService-node
     restart: unless-stopped
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
     networks: 
       - ms-network
     ports:
       - "127.0.0.1:5100:5100"
 
-  Hotel:
+  HotelService:
     image: hotelservice:dev
+    build:
+      context: .
+      dockerfile: src/Services/HotelService/Dockerfile
     container_name: HotelService-node
     restart: unless-stopped
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
     networks: 
       - ms-network
     ports:
       - "127.0.0.1:5200:5200"
 
-  Car:
+  CarService:
     image: carservice:dev
+    build:
+      context: .
+      dockerfile: src/Services/CarService/Dockerfile
     container_name: CarService-node
     restart: unless-stopped
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
     networks: 
       - ms-network
     ports:

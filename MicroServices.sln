@@ -5,19 +5,21 @@ VisualStudioVersion = 17.7.33808.371
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "APIGateway", "APIGateway", "{B2927964-4731-4813-96E0-92E120F9EDFD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microservices.Gateway.Server", "Microservices.Gateway\Server\Microservices.Gateway.Server.csproj", "{299E9A87-C951-45AF-9F63-E7C04A899B4F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microservices.Gateway.Server", "src\Microservices.Gateway\Server\Microservices.Gateway.Server.csproj", "{299E9A87-C951-45AF-9F63-E7C04A899B4F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microservices.Gateway.Client", "Microservices.Gateway\Client\Microservices.Gateway.Client.csproj", "{BBAEFEDD-B554-410D-ACEC-F9FB4634433E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microservices.Gateway.Client", "src\Microservices.Gateway\Client\Microservices.Gateway.Client.csproj", "{BBAEFEDD-B554-410D-ACEC-F9FB4634433E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microservices.Gateway.Shared", "Microservices.Gateway\Shared\Microservices.Gateway.Shared.csproj", "{2ED0845C-87C3-44EA-AFB4-2CF659083073}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microservices.Gateway.Shared", "src\Microservices.Gateway\Shared\Microservices.Gateway.Shared.csproj", "{2ED0845C-87C3-44EA-AFB4-2CF659083073}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{F8389101-B1DB-4D2A-841E-A00666E091F3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AirPortService", "Services\AirPortService\AirPortService.csproj", "{9F329B18-BEED-4C6E-B2C5-F146AB6A2DEB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AirPortService", "src\Services\AirPortService\AirPortService.csproj", "{9F329B18-BEED-4C6E-B2C5-F146AB6A2DEB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarService", "Services\CarService\CarService.csproj", "{697F318F-32D1-4B55-A8B3-3D26A54D5839}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarService", "src\Services\CarService\CarService.csproj", "{697F318F-32D1-4B55-A8B3-3D26A54D5839}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelService", "Services\HotelService\HotelService.csproj", "{11E70BE7-34AC-4745-9A57-EDD93DD01D28}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelService", "src\Services\HotelService\HotelService.csproj", "{11E70BE7-34AC-4745-9A57-EDD93DD01D28}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{35AEC85A-4EF6-4AE0-9AE6-061A55B6680A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +51,10 @@ Global
 		{11E70BE7-34AC-4745-9A57-EDD93DD01D28}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11E70BE7-34AC-4745-9A57-EDD93DD01D28}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11E70BE7-34AC-4745-9A57-EDD93DD01D28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35AEC85A-4EF6-4AE0-9AE6-061A55B6680A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35AEC85A-4EF6-4AE0-9AE6-061A55B6680A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35AEC85A-4EF6-4AE0-9AE6-061A55B6680A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35AEC85A-4EF6-4AE0-9AE6-061A55B6680A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
