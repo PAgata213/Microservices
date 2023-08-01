@@ -1,32 +1,32 @@
 version: "3.7"
 
 services:
-  # postgres:
-  #   image: postgres:latest
-  #   container_name: postgres-node
-  #   environment:
-  #     - POSTGRES_PASSWORD=postgres
-  #   restart: unless-stopped
-  #   networks: 
-  #     - ms-network
-  #   ports:
-  #     - "127.0.0.1:5432:5432"
+  postgres:
+    image: postgres:latest
+    container_name: postgres-node
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    restart: unless-stopped
+    networks: 
+      - ms-network
+    ports:
+      - "127.0.0.1:5432:5432"
 
-  # rabbitmq:
-  #   image: rabbitmq:3-management
-  #   container_name: rabbitmq-node
-  #   restart: unless-stopped
-  #   networks: 
-  #     - ms-network
-  #   ports:
-  #     - "127.0.0.1:15672:15672"
-  #     - "127.0.0.1:5672:5672"
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq-node
+    restart: unless-stopped
+    networks: 
+      - ms-network
+    ports:
+      - "127.0.0.1:15672:15672"
+      - "127.0.0.1:5672:5672"
 
   microservices.gateway.server:
     image: gateway:dev
     build:
-      context: .
-      dockerfile: src/Microservices.Gateway/Server/Dockerfile
+      context: src/Microservices.Gateway/
+      dockerfile: Server/Dockerfile
     container_name: gateway-node
     restart: unless-stopped
     environment:
@@ -39,47 +39,47 @@ services:
       - "127.0.0.1:5000:5000"
       - "127.0.0.1:5001:5001"
 
-  # AirPortService:
-  #   image: airportservice:dev
-  #   build:
-  #     context: .
-  #     dockerfile: src/Services/AirPortService/Dockerfile
-  #   container_name: AirPortService-node
-  #   restart: unless-stopped
-  #   environment:
-  #     - ASPNETCORE_ENVIRONMENT=Development
-  #   networks: 
-  #     - ms-network
-  #   ports:
-  #     - "127.0.0.1:5100:5100"
+  AirPortService:
+    image: airportservice:dev
+    build:
+      context: src/
+      dockerfile: Services/AirPortService/Dockerfile
+    container_name: AirPortService-node
+    restart: unless-stopped
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    networks: 
+      - ms-network
+    ports:
+      - "127.0.0.1:5100:5100"
 
-  # HotelService:
-  #   image: hotelservice:dev
-  #   build:
-  #     context: .
-  #     dockerfile: src/Services/HotelService/Dockerfile
-  #   container_name: HotelService-node
-  #   restart: unless-stopped
-  #   environment:
-  #     - ASPNETCORE_ENVIRONMENT=Development
-  #   networks: 
-  #     - ms-network
-  #   ports:
-  #     - "127.0.0.1:5200:5200"
+  HotelService:
+    image: hotelservice:dev
+    build:
+      context: src/
+      dockerfile: Services/HotelService/Dockerfile
+    container_name: HotelService-node
+    restart: unless-stopped
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    networks: 
+      - ms-network
+    ports:
+      - "127.0.0.1:5200:5200"
 
-  # CarService:
-  #   image: carservice:dev
-  #   build:
-  #     context: .
-  #     dockerfile: src/Services/CarService/Dockerfile
-  #   container_name: CarService-node
-  #   restart: unless-stopped
-  #   environment:
-  #     - ASPNETCORE_ENVIRONMENT=Development
-  #   networks: 
-  #     - ms-network
-  #   ports:
-  #     - "127.0.0.1:5300:5300"
+  CarService:
+    image: carservice:dev
+    build:
+      context: src/
+      dockerfile: Services/CarService/Dockerfile
+    container_name: CarService-node
+    restart: unless-stopped
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    networks: 
+      - ms-network
+    ports:
+      - "127.0.0.1:5300:5300"
 
 networks:
   ms-network:
