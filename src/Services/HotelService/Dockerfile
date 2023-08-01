@@ -6,11 +6,11 @@ WORKDIR /app
 EXPOSE 5200
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0-preview AS build
-WORKDIR /src
-COPY ["Services/HotelService/HotelService.csproj", "Services/HotelService/"]
+WORKDIR /source
+COPY ["src/Services/HotelService/HotelService.csproj", "Services/HotelService/"]
 RUN dotnet restore "Services/HotelService/HotelService.csproj"
-COPY . .
-WORKDIR "/src/Services/HotelService"
+COPY "src/Services/HotelService" "Services/HotelService/"
+WORKDIR "Services/HotelService"
 RUN dotnet build "HotelService.csproj" -c Release -o /app/build
 
 FROM build AS publish

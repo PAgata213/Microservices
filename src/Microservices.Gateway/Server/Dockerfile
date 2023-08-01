@@ -6,15 +6,14 @@ WORKDIR /app
 EXPOSE 5001
 EXPOSE 5000
 
-
 FROM mcr.microsoft.com/dotnet/sdk:8.0-preview AS build
-WORKDIR /src
-COPY ["Microservices.Gateway/Server/Microservices.Gateway.Server.csproj", "Microservices.Gateway/Server/"]
-COPY ["Microservices.Gateway/Client/Microservices.Gateway.Client.csproj", "Microservices.Gateway/Client/"]
-COPY ["Microservices.Gateway/Shared/Microservices.Gateway.Shared.csproj", "Microservices.Gateway/Shared/"]
+WORKDIR /source
+COPY ["src/Microservices.Gateway/Server/Microservices.Gateway.Server.csproj", "Microservices.Gateway/Server/"]
+COPY ["src/Microservices.Gateway/Client/Microservices.Gateway.Client.csproj", "Microservices.Gateway/Client/"]
+COPY ["src/Microservices.Gateway/Shared/Microservices.Gateway.Shared.csproj", "Microservices.Gateway/Shared/"]
 RUN dotnet restore "Microservices.Gateway/Server/Microservices.Gateway.Server.csproj"
-COPY . .
-WORKDIR "/src/Microservices.Gateway/Server"
+COPY ["src/Microservices.Gateway/", "Microservices.Gateway/"]
+WORKDIR "Microservices.Gateway/Server/"
 RUN dotnet build "Microservices.Gateway.Server.csproj" -c Release -o /app/build
 
 FROM build AS publish

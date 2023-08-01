@@ -6,11 +6,11 @@ WORKDIR /app
 EXPOSE 5300
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0-preview AS build
-WORKDIR /src
-COPY ["Services/CarService/CarService.csproj", "Services/CarService/"]
+WORKDIR /source
+COPY ["src/Services/CarService/CarService.csproj", "Services/CarService/"]
 RUN dotnet restore "Services/CarService/CarService.csproj"
-COPY . .
-WORKDIR "/src/Services/CarService"
+COPY "src/Services/CarService" "Services/CarService/"
+WORKDIR "Services/CarService"
 RUN dotnet build "CarService.csproj" -c Release -o /app/build
 
 FROM build AS publish

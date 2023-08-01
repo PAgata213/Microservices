@@ -6,17 +6,18 @@ WORKDIR /app
 EXPOSE 5100
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0-preview AS build
-WORKDIR /src
-COPY ["Services/AirPortService/AirPortService.csproj", "Services/AirPortService/"]
+WORKDIR /source
+COPY ["src/Services/AirPortService/AirPortService.csproj", "Services/AirPortService/"]
+COPY ["src/Microservices.Gateway/Shared/Microservices.Gateway.Shared.csproj", "Microservices.Gateway/Shared/"]
 RUN dotnet restore "Services/AirPortService/AirPortService.csproj"
-COPY . .
-WORKDIR "/src/Services/AirPortService"
+COPY "src/Services/AirPortService/" "Services/AirPortService/"
+WORKDIR "Services/AirPortService/"
 RUN dotnet build "AirPortService.csproj" -c Release -o /app/build
 
-FROM build AS publish
-RUN dotnet publish "AirPortService.csproj" -c Release -o /app/publish /p:UseAppHost=false
-
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "AirPortService.dll"]
+#FROM build AS publish
+#RUN dotnet publish "AirPortService.csproj" -c Release -o /app/publish /p:UseAppHost=false
+#
+#FROM base AS final
+#WORKDIR /app
+#COPY --from=publish /app/publish .
+#ENTRYPOINT ["dotnet", "AirPortService.dll"]
