@@ -1,5 +1,6 @@
 ﻿using Chronicle;
 
+using Microservices.Gateway.Server.Models;
 using Microservices.Gateway.Server.Sagas.SagaCommands;
 using Microservices.Gateway.Server.Services;
 
@@ -30,12 +31,19 @@ internal class CreateReservationSaga(IReservationService reservationService) : S
 
   public async Task HandleAsync(CreateHotelReservation message, ISagaContext context)
   {
-    var result = await reservationService.CreateHotelReservation(message.UserId, message.HotelId);
-    if(!result.Created)
+    try
     {
-      await RejectAsync(new Exception("Error creating hotel reservation"));
+      var result = await reservationService.CreateHotelReservation(message.UserId, message.HotelId);
+      if(!result.Created)
+      {
+        await RejectAsync(new Exception("Error creating hotel reservation"));
+      }
+      Data.HotelReservationId = result!.ReservationId;
     }
-    Data.HotelReservationId = result.ReservationId;
+    catch(Exception ex)
+    {
+      await RejectAsync(new Exception("Error creating hotel reservation", ex));
+    }
   }
   public async Task CompensateAsync(CreateHotelReservation message, ISagaContext context)
   {
@@ -47,12 +55,19 @@ internal class CreateReservationSaga(IReservationService reservationService) : S
 
   public async Task HandleAsync(CreateCarReservation message, ISagaContext context)
   {
-    var result = await reservationService.CreateCarReservation(message.UserId, message.CarId);
-    if(!result.Created)
+    try
     {
-      await RejectAsync(new Exception("Error creating car reservation"));
+      var result = await reservationService.CreateCarReservation(message.UserId, message.CarId);
+      if(!result.Created)
+      {
+        await RejectAsync(new Exception("Error creating car reservation"));
+      }
+      Data.CarReservationId = result.ReservationId;
     }
-    Data.CarReservationId = result.ReservationId;
+    catch(Exception ex)
+    {
+      await RejectAsync(new Exception("Error creating car reservation", ex));
+    }
   }
   public async Task CompensateAsync(CreateCarReservation message, ISagaContext context)
   {

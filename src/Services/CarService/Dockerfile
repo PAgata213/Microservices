@@ -2,7 +2,6 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0-preview AS build
 WORKDIR /src
 COPY ["Services/CarService", "Services/CarService"]
 COPY ["Microservices.Gateway/Shared", "Microservices.Gateway/Shared"]
-run ls -a
 RUN dotnet restore "Services/CarService/CarService.csproj"
 RUN dotnet build "/src/Services/CarService/CarService.csproj" -c Release -o out
 
