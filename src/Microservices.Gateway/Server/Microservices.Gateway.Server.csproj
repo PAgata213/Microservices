@@ -40,5 +40,11 @@
     <Folder Include="SagaWithRabbitMq\StateMachine\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="dockerdemo.pfx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 
 </Project>

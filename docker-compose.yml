@@ -5,12 +5,21 @@ services:
     image: postgres:latest
     container_name: postgres-node
     environment:
+      - PGUSER=postgres
+      - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     restart: unless-stopped
     networks: 
       - ms-network
     ports:
-      - "127.0.0.1:5432:5432"
+      - "5432:5432"
+    healthcheck:
+      test: pg_isready
+      interval: 5s
+      timeout: 10s
+      retries: 3
+    volumes:
+      - db-data:/var/lib/postgresql/data
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -19,66 +28,97 @@ services:
     networks: 
       - ms-network
     ports:
-      - "127.0.0.1:15672:15672"
-      - "127.0.0.1:5672:5672"
+      - "15672:15672"
+      - "5672:5672"
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 5s
+      timeout: 10s
+      retries: 3
 
   microservices.gateway.server:
     image: gateway:dev
     build:
-      context: .
-      dockerfile: src/Microservices.Gateway/Server/Dockerfile
+      context: src/Microservices.Gateway/
+      dockerfile: Server/Dockerfile
     container_name: gateway-node
-    restart: unless-stopped
+    restart: on-failure
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=Password
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=dockerdemo.pfx
     networks: 
       - ms-network
     ports:
-      - "127.0.0.1:5000:5000"
-      - "127.0.0.1:5001:5001"
-
+      - "5000:5000"
+      - "5001:5001"
+    
   AirPortService:
     image: airportservice:dev
     build:
-      context: .
-      dockerfile: src/Services/AirPortService/Dockerfile
+      context: src/
+      dockerfile: Services/AirPortService/Dockerfile
     container_name: AirPortService-node
     restart: unless-stopped
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     networks: 
       - ms-network
     ports:
-      - "127.0.0.1:5100:5100"
+      - "5100:5100"
 
   HotelService:
     image: hotelservice:dev
     build:
-      context: .
-      dockerfile: src/Services/HotelService/Dockerfile
+      context: src/
+      dockerfile: Services/HotelService/Dockerfile
     container_name: HotelService-node
     restart: unless-stopped
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     networks: 
       - ms-network
     ports:
-      - "127.0.0.1:5200:5200"
+      - "5200:5200"
 
   CarService:
     image: carservice:dev
     build:
-      context: .
-      dockerfile: src/Services/CarService/Dockerfile
+      context: src/
+      dockerfile: Services/CarService/Dockerfile
     container_name: CarService-node
     restart: unless-stopped
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     networks: 
       - ms-network
     ports:
-      - "127.0.0.1:5300:5300"
+      - "5300:5300"
 
 networks:
   ms-network:
     name: ms-network
+
+volumes:
+  db-data:
+    driver: local

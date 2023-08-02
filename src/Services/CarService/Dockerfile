@@ -1,22 +1,15 @@
-#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-FROM mcr.microsoft.com/dotnet/aspnet:8.0-preview AS base
-USER app
-WORKDIR /app
-EXPOSE 5300
-
 FROM mcr.microsoft.com/dotnet/sdk:8.0-preview AS build
 WORKDIR /src
-COPY ["Services/CarService/CarService.csproj", "Services/CarService/"]
+COPY ["Services/CarService", "Services/CarService"]
+COPY ["Microservices.Gateway/Shared", "Microservices.Gateway/Shared"]
 RUN dotnet restore "Services/CarService/CarService.csproj"
-COPY . .
-WORKDIR "/src/Services/CarService"
-RUN dotnet build "CarService.csproj" -c Release -o /app/build
+RUN dotnet build "/src/Services/CarService/CarService.csproj" -c Release -o out
 
 FROM build AS publish
-RUN dotnet publish "CarService.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "/src/Services/CarService/CarService.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-FROM base AS final
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-preview
+USER app
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "CarService.dll"]
