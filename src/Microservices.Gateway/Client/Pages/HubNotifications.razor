@@ -17,7 +17,6 @@
 	</label>
 </div>
 <button @onclick="Send" disabled="@(!IsConnected)">Send</button>
-ConnectionId : @(_hubConnection?.ConnectionId)
 <hr>
 
 <ul id="messagesList">
@@ -42,10 +41,10 @@ ConnectionId : @(_hubConnection?.ConnectionId)
 				x.SkipNegotiation = true;
 				x.Transports = Microsoft.AspNetCore.Http.Connections.HttpTransportType.WebSockets;
 				x.HttpMessageHandlerFactory = _ => new HttpClientHandler
-				{
-					ClientCertificateOptions = ClientCertificateOption.Manual,
-					ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) => { return true; }
-				};
+					{
+						ClientCertificateOptions = ClientCertificateOption.Manual,
+						ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) => { return true; }
+					};
 			})
 			.Build();
 
@@ -63,7 +62,7 @@ ConnectionId : @(_hubConnection?.ConnectionId)
 	{
 		if(_hubConnection is not null)
 		{
-			await _hubConnection.SendAsync("SendMessage", _userInput, _messageInput);
+			await _hubConnection.SendAsync("SendToAllAsync", _userInput, _messageInput);
 		}
 	}
 

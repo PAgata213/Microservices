@@ -2,6 +2,7 @@ using MassTransit;
 
 using NotificationService;
 using NotificationService.Handlers;
+using NotificationService.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
-builder.Services.AddSingleton<INotificationHub, NotificationHub>();
+builder.Services.AddSingleton<INotificationHubHelper, NotificationHubHelper>();
 
 builder.Services.AddCors();
 

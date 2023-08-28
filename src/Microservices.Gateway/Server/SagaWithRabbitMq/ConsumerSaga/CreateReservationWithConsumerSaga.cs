@@ -81,9 +81,9 @@ public class CreateReservationWithConsumerSaga
     {
       CorrelationId = CorrelationId,
       UserId = SagaData!.UserId,
-      FlyReservationId = context.Message.CorrelationId,
-      HotelReservationId = context.Message.CorrelationId,
-      CarReservationId = context.Message.CorrelationId
+      FlyReservationId = FlyReservationId,
+      HotelReservationId = HotelReservationId,
+      CarReservationId = CarReservationId
     }, context.CancellationToken);
   }
   public async Task Consume(ConsumeContext<CarReservationCreationFailed> context)
