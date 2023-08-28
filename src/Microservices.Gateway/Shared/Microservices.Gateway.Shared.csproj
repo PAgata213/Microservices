@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MassTransit" Version="8.1.0-develop.1407" />
-    <PackageReference Include="MassTransit.RabbitMQ" Version="8.1.0-develop.1407" />
+    <PackageReference Include="MassTransit" Version="8.1.1-develop.1522" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.1.1-develop.1522" />
   </ItemGroup>
 </Project>

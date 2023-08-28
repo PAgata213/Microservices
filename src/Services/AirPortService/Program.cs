@@ -22,7 +22,7 @@ builder.Services.AddScoped<IAirPortRepository, AirPortRepository>();
 
 builder.Services.AddMassTransit(cfg =>
 {
-  cfg.AddBus(busCtx => Bus.Factory.CreateUsingRabbitMq(rmcfg =>
+  cfg.UsingRabbitMq((busCtx, rmcfg) =>
   {
     rmcfg.Host("rabbitmq-node", "/", h =>
     {
@@ -37,7 +37,8 @@ builder.Services.AddMassTransit(cfg =>
     {
       e.ConfigureConsumer<CancelFlyReservationConsumer>(busCtx);
     });
-  }));
+  });
+
   cfg.AddConsumer<CreateFlyReservationConsumer>();
   cfg.AddConsumer<CancelFlyReservationConsumer>();
 });

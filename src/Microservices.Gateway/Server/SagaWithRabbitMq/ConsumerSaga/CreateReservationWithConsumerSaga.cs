@@ -68,6 +68,7 @@ public class CreateReservationWithConsumerSaga
     await context.Publish(new CancelFlyReservation
     {
       CorrelationId = CorrelationId,
+      UserId = SagaData!.UserId,
       ReservationId = FlyReservationId
     }, context.CancellationToken);
     await FinalizeSagaWithError(context, context.Message.Message);
@@ -79,6 +80,7 @@ public class CreateReservationWithConsumerSaga
     await context.Publish(new ReservationCreated
     {
       CorrelationId = CorrelationId,
+      UserId = SagaData!.UserId,
       FlyReservationId = context.Message.CorrelationId,
       HotelReservationId = context.Message.CorrelationId,
       CarReservationId = context.Message.CorrelationId

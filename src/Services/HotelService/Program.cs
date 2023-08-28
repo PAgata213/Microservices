@@ -22,7 +22,7 @@ builder.Services.AddScoped<IHotelRepository, HotelRepository>();
 
 builder.Services.AddMassTransit(cfg =>
 {
-  cfg.AddBus(busCtx => Bus.Factory.CreateUsingRabbitMq(rmcfg =>
+  cfg.UsingRabbitMq((busCtx, rmcfg) =>
   {
     rmcfg.Host("rabbitmq-node", "/", h =>
     {
@@ -37,7 +37,7 @@ builder.Services.AddMassTransit(cfg =>
     {
       e.ConfigureConsumer<CancelHotelReservationConsumer>(busCtx);
     });
-  }));
+  });
   cfg.AddConsumer<CreateHotelReservationConsumer>();
   cfg.AddConsumer<CancelHotelReservationConsumer>();
 });

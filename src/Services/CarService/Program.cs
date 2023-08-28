@@ -22,7 +22,7 @@ builder.Services.AddScoped<ICarRepository, CarRepository>();
 
 builder.Services.AddMassTransit(cfg =>
 {
-  cfg.AddBus(busCtx => Bus.Factory.CreateUsingRabbitMq(rmcfg =>
+  cfg.UsingRabbitMq((busCtx, rmcfg) =>
   {
     rmcfg.Host("rabbitmq-node", "/", h =>
     {
@@ -37,7 +37,7 @@ builder.Services.AddMassTransit(cfg =>
     {
       e.ConfigureConsumer<CancelCarReservationConsumer>(busCtx);
     });
-  }));
+  });
   cfg.AddConsumer<CreateCarReservationConsumer>();
   cfg.AddConsumer<CancelCarReservationConsumer>();
 });

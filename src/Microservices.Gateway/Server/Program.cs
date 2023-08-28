@@ -2,6 +2,7 @@ using Chronicle;
 
 using MassTransit;
 
+using Microservices.Gateway.Server;
 using Microservices.Gateway.Server.Helpers;
 using Microservices.Gateway.Server.SagaWithRabbitMq.ConsumerSaga;
 using Microservices.Gateway.Server.Services;
@@ -20,10 +21,10 @@ builder.Services.AddMediatR(o => o.RegisterServicesFromAssembly(typeof(Program).
 builder.Services.AddSingleton<IHttpClientHelper, HttpClientHelper>();
 builder.Services.AddSingleton<IReservationService, ReservationService>();
 builder.Services.AddChronicle();
-
+builder.Services.AddCors();
 builder.Services.AddMassTransit(cfg => 
 {
-  cfg.AddBus(busCtx => Bus.Factory.CreateUsingRabbitMq(rmcfg =>
+  cfg.UsingRabbitMq((busCtx, rmcfg) =>
   {
     rmcfg.Host("rabbitmq-node", "/", h =>
     {
@@ -34,12 +35,10 @@ builder.Services.AddMassTransit(cfg =>
     {
       e.ConfigureSaga<CreateReservationWithConsumerSaga>(busCtx);
     });
-  }));
-
+  });
   cfg.AddSaga<CreateReservationWithConsumerSaga>()
     .InMemoryRepository();
 });
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -57,6 +56,12 @@ else
 app.UseSwagger();
 app.UseSwaggerUI();
 
+app.UseCors(cors => cors
+.AllowAnyMethod()
+.AllowAnyHeader()
+.SetIsOriginAllowed(origin => true)
+.AllowCredentials()
+);
 //app.UseHttpsRedirection();
 
 app.UseBlazorFrameworkFiles();

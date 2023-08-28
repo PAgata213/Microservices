@@ -133,7 +133,7 @@ services:
     networks: 
       - ms-network
     ports:
-      - "127.0.0.1:5400:5400"
+      - "5400:5400"
 
 networks:
   ms-network:
